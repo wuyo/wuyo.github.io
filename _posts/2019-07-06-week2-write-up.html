@@ -1,0 +1,31 @@
+---
+layout: post
+title: "Week 2 Write Up"
+subtitle: "Advanced Forensic Method"
+date: 2019-07-06 10:45:13 -0800
+background: '/img/posts/banner-computer-forensic.jpg'
+---
+
+
+<p>In this week, I’ve learned a lot of forensics, methodology, terminology to deal with the incident response. It is kind of interesting that is, as a computer security researcher,
+  we can also act like a real forensic to help company/government to investigate the cases. After study from the lecture I've learned that there is a clear procedure to deal with the incident.
+  The first thing is to identify the evidence, such as network, operating system, databases, peripherals, USB disk etc. I personally think these would be the basic entry point for analyst the evidence,
+  and I am sure there will be more out there. There is also a very important action before proceeding to the next procedure, is to log the current time and then compare to the machine’s time.</p>
+
+
+<p>The second procedure is to preserve the evidence. The goal of preserve the evidence is to minimize the data loss. This is what I believe is one of the most difficult procedure to follow.
+  For example: memory. Because of the specialty of the RAM, the content in the RAM will be completely wipe out once the power is being cut. There is an overkill way that mention by other student which is to freeze the machine before cut the power.
+  At first, I thought that student was talking about a software tool or something that can “freeze” the memory state until I realized that the “freeze” is the real thing. </p>
+
+<p>So how are we going to preserve the evidence on the memory?
+  The answer is to use the memory dump tools to dump the memory to the other location besides suspect’s machine such as external drive. We can also look at the other file that possibly contain the memory data on the hard disk such as page file and hibernation file.
+  However, memory dump is not a perfect solution. Since we need to launch the tool on the system which means it is highly possible that the memory data has been modified and result in data loses. </p>
+
+
+<p>The third procedure is to analysis data. To analyze data, there is an important idea need to keep in mind that is - Triage. Triage means when it comes with the conclusion, we need to prove that in different ways. For example, we need to check the disk file, the memory dump,
+  the log files at the same time to ensure that all the results are leads to the same conclusion. Because of the specialty of the security investigator, we can get other personal data easily when digging into suspect’s machine. However, that’s clearly a red flag.
+  We need to ask for permission from the court first before we continue digging into those data. Otherwise, we are against the privacy law. In conclusion, keep aware of privacy of somebody else. There is also a very important idea is that when we are investigating suspect’s machine,
+  we need to focus on what happened on the machine but not to find out the suspect is guilty or not. I personally think the purpose of this is because when we trying to find out the suspect is guilty or not, the investigation will not be justice anymore.
+  It is extremely possible that the investigation will be based on prejudice and biased. </p>
+
+<p>The last procedure is the present results. When writing the report, try to avoid absoluteness, use almost, surely etc. instead. For example: I am almost sure that this guy did this. Also, keep the report as tight as possible. </p>
