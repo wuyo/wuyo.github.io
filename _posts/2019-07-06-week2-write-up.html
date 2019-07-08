@@ -12,14 +12,21 @@ background: '/img/posts/banner-computer-forensic.jpg'
   The first thing is to identify the evidence, such as network, operating system, databases, peripherals, USB disk etc. I personally think these would be the basic entry point for analyst the evidence,
   and I am sure there will be more out there. There is also a very important action before proceeding to the next procedure, is to log the current time and then compare to the machine’s time.</p>
 
-
+<h2 class="section-heading">Preserve Evidence</h2>
 <p>The second procedure is to preserve the evidence. The goal of preserve the evidence is to minimize the data loss. This is what I believe is one of the most difficult procedure to follow.
   For example: memory. Because of the specialty of the RAM, the content in the RAM will be completely wipe out once the power is being cut. There is an overkill way that mention by other student which is to freeze the machine before cut the power.
   At first, I thought that student was talking about a software tool or something that can “freeze” the memory state until I realized that the “freeze” is the real thing. </p>
+  <img class="img-fluid" src="https://static01.nyt.com/images/2008/02/22/technology/chip.600.jpg" alt="Freeze Memory">
+  <span class="caption text-muted">Source: Center for Information Technology Policy, Princeton University</span>
 
 <p>So how are we going to preserve the evidence on the memory?
   The answer is to use the memory dump tools to dump the memory to the other location besides suspect’s machine such as external drive. We can also look at the other file that possibly contain the memory data on the hard disk such as page file and hibernation file.
   However, memory dump is not a perfect solution. Since we need to launch the tool on the system which means it is highly possible that the memory data has been modified and result in data loses. </p>
+
+ <P>When it comes to dumping the memory, the thing needs to recall that is the output destination must be outside the suspect machine and, the output file naming strategy typically will be a machine’s serial number or project code name plus the current date ad finally end with the extension mem.
+  With tool FTK Imager, we can easily dump the machine’s memory. </P>
+  <img class="img-fluid" src="/img/posts/memory_dump.jpg" alt="dump_memory">
+  <span class="caption text-muted">Since there is no external hardisk, we will just save to desktop as demo</span>
 
 
 <p>The third procedure is to analysis data. To analyze data, there is an important idea need to keep in mind that is - Triage. Triage means when it comes with the conclusion, we need to prove that in different ways. For example, we need to check the disk file, the memory dump,
@@ -27,5 +34,36 @@ background: '/img/posts/banner-computer-forensic.jpg'
   We need to ask for permission from the court first before we continue digging into those data. Otherwise, we are against the privacy law. In conclusion, keep aware of privacy of somebody else. There is also a very important idea is that when we are investigating suspect’s machine,
   we need to focus on what happened on the machine but not to find out the suspect is guilty or not. I personally think the purpose of this is because when we trying to find out the suspect is guilty or not, the investigation will not be justice anymore.
   It is extremely possible that the investigation will be based on prejudice and biased. </p>
+
+<h2 class="section-heading">Memory Dump Analyzing</h2>
+
+<p>To start to analysis the memory dump file. Before studying the lecture, I am always curious about how to analysis the memory. To be more specific, how data are being presented in the memory? Like a normal disk driver or full of random unorganized character?
+  If so, how are we supposed to extract the information that we need? Until I use Volatility – a powerful memory dump analyzing tool. </p>
+  <img class="img-fluid" src="/img/posts/Volatility.jpg" alt="Freeze Memory">
+  <span class="caption text-muted">The Volatility program itself and its fancy plugins.</span>
+
+<p>With Volatility and its fancy plugins, we can start to investigate like on the real machine. First, we ask Volatility to see whcih profile will be suitable to analze the memory dump.
+  I personally think the profile mechanism here is to deal with the different operating system since the differnet operting system would have their own memory management implementation.</p>
+  <img class="img-fluid" src="/img/posts/Volatility_get_profile.jpg">
+  <span class="caption text-muted">Volatility with --profile flag.</span>
+
+<p>Then, we will add the adviced profile name provided by the volatility itself to its argument, and also add the plugin name. For example getsids
+  <img class="img-fluid" src="/img/posts/Volatility_sids_scan_evil.jpg">
+  <span class="caption text-muted">Volatility getsids plugin combine with filter to filter the desire sid</span>
+
+  <img class="img-fluid" src="/img/posts/Volatility_net_scan.jpg">
+  <span class="caption text-muted">Volatility netscan plugin</span>
+
+<h2 class="section-heading">Hard Disk Analyzing</h2>
+
+  <p>When it comes to analyzing the hard disk, there are few files that are always worth for looking, such as page file, hibernation file etc. Registry is also a good place to look at, especially the HQ users and HQLM. Simply is because in HQ user, there are data such as internet browser history,
+    last accessed file etc. And we need to keep in mind that always care about the MAC which is file last modify time, last accessed time and create time. </p>
+
+  <p>There are also highly possible that the suspect has delete some of the file. To deal with this situation, we need tool to recover the data from the disk. For example, we need to recover some pictures or photos. Photorec would be able to help us.</p>
+  <img class="img-fluid" src="/img/posts/carving.jpg">
+  <span class="caption text-muted">Tool Photorec and unreconizeable Drive E</span>
+
+  <img class="img-fluid" src="/img/posts/carving_save.jpg">
+  <span class="caption text-muted">Recover files</span>
 
 <p>The last procedure is the present results. When writing the report, try to avoid absoluteness, use almost, surely etc. instead. For example: I am almost sure that this guy did this. Also, keep the report as tight as possible. </p>
