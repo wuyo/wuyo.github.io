@@ -1,0 +1,152 @@
+---
+layout: post
+title: "Week 3 Write Up"
+subtitle: "Malware Defense"
+date: 2019-07-13 10:13:13 -0800
+background: ''
+---
+<h2 class="section-heading">Yara Signature</h2>
+  <p> To detect and identify the maware, one way is to calculate it's hash value then compare it with the suspicious file to see if they are the same. However, there are chances that the malware author changes the malware a little bit
+     then repack as the different malware. At this time, the hash value changed. We can nologer to compare its hash value to determine is the virant or not. Therefore, here comes the problem, we need to reexaminate the malware again and again
+     but with the similar outcome. At this time, we can write Yara rules to help us to identify the malware virants. </p>
+
+     <img class="img-fluid" src="/img/posts/wk3/yara_sample.JPG">
+     <span class="caption text-muted">Yara Rules Sample</span>
+
+<h2 class="section-heading">Determine Yara Conditions</h2>
+
+  <p> Here we list an example on how to write yara rules and how to choose the yara conditions. From the image shown below, we have 7 virants sample in the folder. We first examinate the least size sample first. </p>
+
+    <img class="img-fluid" src="/img/posts/wk3/sytro/sytro_folder.JPG">
+    <span class="caption text-muted">Sample Folder</span>
+
+  <p> we use FileInsight and its plugin "string" to find possible strings can be use as conditions. After some digging, we can find that there is a suspicious name "Jenna Jam" that maybe belongs to the malware author. </p>
+
+    <img class="img-fluid" src="/img/posts/wk3/sytro/03d_Jenna.JPG">
+    <span class="caption text-muted">Suspicious Name</span>
+
+  <p> Then, we examniate other samples with FileInsight, and we can find out that the sample "9c915**" also has the suspicious name "Jenna Jam", same as sample "e1402" etc. It turns out that the name is actually part of the
+      name of other excutable sample</p>
+
+    <img class="img-fluid" src="/img/posts/wk3/sytro/Jenna_merge.JPG">
+    <span class="caption text-muted">Jenna Jam</span>
+
+  <p> We continue to lookup other strings that are unique that can be used as yara rules. A string name "AikaQus" also catch the cautions. And yes, the string also exists in the other virants sample as well. </p>
+
+    <img class="img-fluid" src="/img/posts/wk3/sytro/aikaq_merge.JPG">
+    <span class="caption text-muted">AikaQ</span>
+
+  <p> We can now write yara rules now. As iamge shown below </p>
+
+  <img class="img-fluid" src="/img/posts/wk3/sytro/yara_rules_sytro.JPG">
+  <span class="caption text-muted">Yara Rules</span>
+
+  <p> Now, we can test out the yara rules. There are also other malware samples in the different folder in folder "sample". Yara should not identify them.</p>
+
+    <img class="img-fluid" src="/img/posts/wk3/sytro/sample_folder.JPG">
+    <span class="caption text-muted">Other Samples</span>
+
+
+    <img class="img-fluid" src="/img/posts/wk3/sytro/sytro_folder.JPG">
+    <span class="caption text-muted">Test Sample</span>
+
+  <p> Finally, we can identify all the samples correctly. </p>
+
+    <img class="img-fluid" src="/img/posts/wk3/sytro/yara_output_sytro.JPG">
+    <span class="caption text-muted">After Yara Excution</span>
+
+<h2 class="section-heading">Automated Analysis</h2>
+
+  <p> Typically, we manully analyze the malware by opening a bunch of the tool, then manually fire up the malware. Then, we examinate the log files, compare them manully. This will costs a lots time.
+      There is some new approch to detects the malware, for example, machine learning. Machine learning to use decision trees for cloud lookups, and checks the DNS request to see how many DNS queries on that machine
+      Despite the futre technology, "Cuckoo", an open source automated tools for analyze the malware. Cuckoo running on virtualized network. Host controller instructing each individual VM, passing file to run,
+      giving parameters pf how to run the file, Cuckoo create the process, injects its dll into that process, so that it can trace the win32 api calls,
+      then streaming those results back to the host computer whcih can be store into the database. </p>
+
+      <img class="img-fluid" src="/img/posts/wk3/cuckoo/evil.JPG">
+      <span class="caption text-muted">Cuckoo Interface</span>
+
+<h2 class="section-heading">Challenge</h2>
+
+  <p>Randomly pick one sample from the folder. First, using FileInsight and plugin "Strings" to parse the readable string from the sample.
+     Fortunately, the strings that shows at first has already give us some clue about what the progam might be doing. And from thoes strings, it is extremely likely that the sample is a malware.
+     For example, from the first string, we can see the sample trying to add a sample name called "qusla.exe" to the starup registry in order to keep alive after the machine is being rebooted.
+     From the second string, we can see the sample query the "HideDesktopIcons" registry key. It is possible that the sample tyring to hide some icons from the desktop. Then, it look like the sample
+     is trying to open two web pages via internet explorer, and set two domain as the internet explorer default startup pages. Theses are all just the assumptions. Let's see what it actually do during the analizing.
+  </p>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/file_insight.JPG">
+    <span class="caption text-muted">String contains in the sample</span>
+
+  <p> Then, Let's start to analysis the sample. Sicne we just mention about the automated analysis from the last section, therefore, we use Cuckoo automated analysis tool to analysis the progrma first.
+      After fireup the Cuckoo, we successfully cature its activites during. From the Cuckoo process log, we can see the sample created some files and Cuckoo capture them and saved to its folder. But first,
+      let's examinate the Cuckoo log first.
+  </p>
+    <img class="img-fluid" src="/img/posts/wk3/final/cuckoo_log.JPG">
+    <span class="caption text-muted">Cuckoo Process Log</span>
+
+  <p> We first examinate the largest log file. Fro mthe file, we can see this file is for the sample process itself "bad" from the third column. And we can see, the sample did create an excutable sample with name
+     "qusla.exe" to drive C. The sample also create a batch file called "Dx.bat" on the desktop and a file name called "text.txt" to the drive C.
+   </p>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/bad_2.JPG">
+    <span class="caption text-muted">Cuckoo log for process "bad"</span>
+
+  <p> Continue to analyze, the sample also create the other files for example "desktop.ini", "Internet Explorer.Ink" to the desktop folder. And indeed, Internet Explorer icon shows up on the desktop. However, when we
+    check its property, we can see the "target" is being modified to a malicious website address.</p>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/bad.JPG">
+    <span class="caption text-muted">Cuckoo log for process "bad"</span>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/explorer_short_cut.JPG">
+    <span class="caption text-muted">Shortcut for Internet Explorer</span>
+
+  <p>We continue to check on other Cuckoo log file. This time, we check the process "cmd" spawn by the sample "bad". From the image shown below, we can see the cmd process mainly for processing the batch file that created by the
+     "bad" sample.</p>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/cmd.JPG">
+    <span class="caption text-muted">process cmd</span>
+
+  <p>Then, we continue to check the other log file with process "reg" spawn by the sample "bad". From the image shown below, we can see the process is adding the sample "qusla.exe" to the starup registy.</p>
+    <img class="img-fluid" src="/img/posts/wk3/final/reg.JPG">
+    <span class="caption text-muted">process reg</span>
+
+  <p> At this point, we are done with the log file. Then, we move on to examinate the files that are being created by the sample "bad". The first file name is "text.txt". However, there is nothing special in it,
+      just the machine time during the excution. Then we continue to examinate the file "Dx.bat". From the shown image below, we can see the sample is copy itself to the drive C and rename as "qusla.exe". Then set its attributes as
+      "read only", "system owned" and "hidden" mode. Then, the sample add the newly copied sample to the startup registry. Last, the sample destroy the batch file itself. There are also other files that are being created by the sample.
+      However, there aren't any useful information, thus we ignore them here.</p>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/text_text.JPG">
+    <span class="caption text-muted">text file</span>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/dx_bat.JPG">
+    <span class="caption text-muted">dx_bat batch file</span>
+
+  <p> We done with the Cuckoo analysis here. However, to determine its behaviours, we need to follow the imporatnt process "traige". Thus, we continue to use other tools to help examinate the sample.
+    With process monitor, we can see the sample's behaviours are the same as Cuckoo.</p>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/process_monitor.JPG">
+    <span class="caption text-muted">process_monitor results</span>
+
+  <p> With tool "AntiSpy", we can see the starup samples, which also includes the sample "qusla.exe" with staup name "aimsn".</p>
+
+    <img class="img-fluid" src="/img/posts/wk3/final/startup.JPG">
+    <span class="caption text-muted">AntiSpy Startup</span>
+
+  <P> After the analyzing, we have conclude that this is a malware that tampered user's default startup internet page. </p>
+
+  <p> We finished analizing the sample, and prove it is malware. The last step is to write a yara rules to help find the potetial similar malware. As we mention before, the malware will copy itself to the
+      other place and rename as "qusla.exe". Then we can add it as a condtion string. Besides, the malware will also name its staup name as "aimsn", we can also add this as condition. </p>
+
+      <img class="img-fluid" src="/img/posts/wk3/final/yara_first_try.JPG">
+      <span class="caption text-muted">Yara Rule</span>
+
+  <p> We finihsed writing the script, time to test. However, no results shows up. After examinate the sample with FileInsight again, the string itslef actually encode as hex value. Therefore, we need to
+      convert as hex value first, then add them to the rules. </p>
+
+      <img class="img-fluid" src="/img/posts/wk3/final/yara_last_try.JPG">
+      <span class="caption text-muted">Hex string</span>
+
+    <p> And finally, the yara detectes the sample. </p>
+      <img class="img-fluid" src="/img/posts/wk3/final/yara_result.JPG">
+      <span class="caption text-muted">Yara result</span>
