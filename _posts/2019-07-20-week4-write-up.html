@@ -1,0 +1,77 @@
+---
+layout: post
+title: "Week 4 Write Up"
+subtitle: "Vulnerabilities and Exploits"
+date: 2019-07-20 09:01:13 -0800
+background: ''
+---
+<h2 class="section-heading">Vulnerabilities and Exploits</h2>
+  <p> To deal with the computer dark arts, an-ti virus, firewall sometimes just not enough. Sometimes, company, enterprise will need some addtional helps. For example, they will invite some security researchers to help break into their system,
+  find all the possible exploits and vunlnerabilities. Then, patch them to prevent the future possible attack. Nowadays, the rasing poupulairty of threts are focusing on the browser and lots of hacker are targeting browser as their attack
+  point such as phshing etc. Exploitation, which means taking advantage of a vulnerability. One of the vunlnerability is stack overflow, which means a program allows a custom define length string to be copied into the vaiable, then a payload
+  write the variable that the program does not supposed to be written, then it will change the data of the program. </p>
+
+<h2 class="section-heading">Gettings Familiar</h2>
+
+  <p> At this week, we are doing a small demo to show how to find explotis and use explotis to achieve our goal, do soemthing or launch a program that do not supposed to be run. Since we are doing demo base on the windows system, thus we need to
+    get to know the windows debugger - WinDbg. Just like the linux debugging tool GDB, it can also set a break point at somewhere int the program, then freeze at that point, and examinate the value, address, etc. a list shown below are the common
+    useful command that can be use in the WinDbg.</p>
+
+  <p>Set breakpoint: bp "function name"</p>
+  <p>List breakpoint list: bl</p>
+  <p>Continue Executing: g</p>
+  <p>step into: t</p>
+  <p>step over: p</p>
+  <p>Display an assembly translation: u "unassamble"</p>
+  <p>Byte values and ASCII characters: db</p>
+  <p>Windows also store lots of things in unix format,to show string, use: du</p>
+  <p>Display sepecific string: da "specific value"</p>
+  <p>Look at specific stack: dd esp</p>
+  <p>displays information in the proccess environemnt: peb</p>
+  <p>displays information in the thread environemnt: teb</P>
+
+  <img class="img-fluid" src="/img/posts/wk4/windbg_interface.JPG">
+  <span class="caption text-muted">WinDbg Interface</span>
+
+  <h2 class="section-heading">Lab</h2>
+  <p> Now, we have learch some basic usage about the winDbg. Let's get Started to hacking! The basic hacking steps are: </p>
+  <p>Crash triage - to determine the level of the control</p>
+  <p>determine the return address offset on the stack</p>
+  <p>position the shell code - fill up data to return address</p>
+  <p>find the address of the shellcode - find the esp jmp instruction and then replace return address with jmp instruction </p>
+
+  <p>First, we need to look at the FSExploitMe.ocs address. We can easily get the address via scrolling up the WinDbg output</p>
+
+  <img class="img-fluid" src="/img/posts/wk4/load_address.JPG">
+  <span class="caption text-muted">FSExploitMe.ocs load address</span>
+
+  <p>Then, lets check the stack size. To do this, we need to use !teb, then we will get the StackBase value and StackLimit value. Substracted them. We can use .formats to help us to calculate the actual decimal value</p>
+  <img class="img-fluid" src="/img/posts/wk4/stack_size.JPG">
+  <span class="caption text-muted">Stack Information</span>
+
+  <img class="img-fluid" src="/img/posts/wk4/stack_size_cal.JPG">
+  <span class="caption text-muted">Stack Size:16384</span>
+
+  <p> Then, we can need to get the the address of the process heap. For this, we can use !peb to help us get the address.</p>
+  <img class="img-fluid" src="/img/posts/wk4/heap_address.JPG">
+  <span class="caption text-muted">Heap Address:004b0000</span>
+
+  <p> Next, we need to get the EIP information. To do this, we must first set the breakpoint, then trigger the breakpoint, to see its value</p>
+  <img class="img-fluid" src="/img/posts/wk4/eip_value.JPG">
+  <span class="caption text-muted">EIP Value: 54431df0</span>
+
+  <p> Then, to get to know the space that allocated for the local varibale, we can set the break point, then find the sub instructions, then again, using .formats to convert to decimal.</p>
+  <img class="img-fluid" src="/img/posts/wk4/eip_l10.JPG">
+  <span class="caption text-muted">Space Being Allocated: 20 Bytes</span>
+
+  <p> To get the string value that at the top of the stack, we need to use du poi(esp) command. </p>
+  <img class="img-fluid" src="/img/posts/wk4/eip_l10.JPG">
+  <span class="caption text-muted">String Value: FluffyBunniesDontFlapOrQuack</span>
+
+  <p> To get the deciaml value of the function, we need to use pt, then again, use .formats to convert the eax instruction position value to the decimal value</p>
+  <img class="img-fluid" src="/img/posts/wk4/decimal_value.JPG">
+  <span class="caption text-muted">Decimal Value of the Function: 31337</span>
+
+  <p> To know if the value pointed to by ESI on the stack, heap, or within the text segment, we can use !address esi to check the usage section. As we can see, it belongs to stack.</p>
+  <img class="img-fluid" src="/img/posts/wk4/belongs_to.JPG">
+  <span class="caption text-muted">Stack</span>
