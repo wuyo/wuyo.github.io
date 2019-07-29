@@ -1,0 +1,79 @@
+---
+layout: post
+title: "Week 5 Write Up"
+subtitle: "Rootkits"
+date: 2019-07-27 20:09:26 -0800
+background: ''
+---
+<h2 class="section-heading">What is Rootkits</h2>
+  <p> This week, we are focsing on the rootkits - a software that has full admin privilidge. But that's not enough, a lots of malware use it to spy on the system. In the early old days, about 10% of malware are actually
+  rootkits, most of them are 32-bit sytem and the bad thing is, in thoes days, the anti malware software having a hard time catch up to deal whith these malware. One of the common use of rootkit for malware is to hide the malware themselves.
+  For example, in normal situation, once the file is being created, windows explore will be able to show the newly created file. However, the malware can use rootkit with admin privilidge to hide themself in or order to prevent
+  detect by the anti malware software or deleted by other purpose.</p>
+
+<h2 class="section-heading">Getting familiar with rootkit</h2>
+<p>
+  Let's see what malware actaully do when using the rootkit. Here, we continue to use Cuckoo, an automated malware analize tool which we mention before, and a kernel inspector tool - Tuluka. Tukula is tool that has the ability
+  to read the current prcess address and the original kernel address then compare them to let the user know if the process is being modifed or not. Here, we examniate a malware that try to hide the itself. After Cuckoo running the malware,
+  let's see the files in Cuckoo analzer folder with windows explorer and also using the dir * command in commnad line prompt to see the directory files.
+</p>
+<img class="img-fluid" src="/img/posts/wk5/normal_explorer.JPG">
+<span class="caption text-muted">Explorer</span>
+<p>
+
+</p>
+<img class="img-fluid" src="/img/posts/wk5/normal_cmd.JPG">
+<span class="caption text-muted">cmd</span>
+<p>
+  Nothing strange, right? However, when using the command prompt and list the files with command dir *.sys. You will see that there is a file called "wininit.sys" also in the directory. But why this file cannot be seen in the explorer
+  and the dir command? Rootkit is behind this. Let's go check with Tuluka to see what happend.
+</p>
+  <img class="img-fluid" src="/img/posts/wk5/admin_cmd.JPG">
+  <span class="caption text-muted">Hidden File "wininit.sys"</span>
+
+<p>
+  From the image shown below, Tuluka detect there are three services that are being modified in the system service dsipatch table. "NtQueryDirectoyFile" is a service that enumerate the directory files. The pointer locaiton has been modifed by the
+  by the malware to other address, which exactly is "wininit.sys". It is clear that the malware is hooking the services, which means when user trying to list the directory files, it will filter out some files firts, then deliver the final result.
+  In the normal situation, the windows explorer and the normal dir command are using the same api that is desgin on the user mode, However, the malware change the file to the higher mode which will require more permission in order to show up the file.
+  </p>
+  <img class="img-fluid" src="/img/posts/wk5/tuluka.JPG">
+  <span class="caption text-muted">Modified System Service Dispatch Table</span>
+
+  In Tuluka, there is a very powerful and convient function that is to restore the services back to the orinal pointer andress. Thus, after we revert the "NtQueryDirectoyFile" service back to the orignal address, the hidden file shows up in the windows explorer.
+  </p>
+  <img class="img-fluid" src="/img/posts/wk5/after_explorer.JPG">
+  <span class="caption text-muted">File "wininit.sys" shows up in the explorer</span>
+
+<h2 class="section-heading">Building a Process Manager Under Linux Environemnt</h2>
+<p>
+  To buidling a system process monitor like program under the linux system, there are already have few programs that are avalibale for us to use. For example, ps command can provide the information about the current running process, with the prcoess id. Here, we could write
+  a simple bash script to call this program with argument -A to enumerate all the process that currenlty running.
+  </p>
+
+  <img class="img-fluid" src="/img/posts/wk5/command_ps.JPG">
+  <span class="caption text-muted">Program "ps"</span>
+
+  <p>
+    Then, to check all the threads within the specific process, we can use another program "pstree" to get all the threads that the process is running. As the image shown below, the ptool is the program that I wrote, and it spawn antoher thread "pstree" which is actually
+    the pstree itself.
+    </p>
+    <img class="img-fluid" src="/img/posts/wk5/pstree.JPG">
+    <span class="caption text-muted">Program "pstree"</span>
+  <p>
+    Next, in order to enumerate all the loaded modules within the processes, we can simply cat the /proc/"process id"/maps directory to get the results
+    </p>
+    <img class="img-fluid" src="/img/posts/wk5/module.JPG">
+    <span class="caption text-muted">Loaded Modules</span>
+
+    <p>
+      To get all the execution pages, we can use program "pmap" to give use the results.
+      </p>
+      <img class="img-fluid" src="/img/posts/wk5/pmap.JPG">
+      <span class="caption text-muted">Excution Pages</span>
+
+    <p>
+      Finally, in order to read the process memory, we need access the file /proc/"process id"/mem file. However, it cannot be cat or read directly because the memory is always changing. To read it, we must atach the process first, then dump the memory.
+      Here, we need to write a another small program using library "ptrace" to attach the process and dump the memory to a file. Then, we can use another program "hexdump" to read the newly dumped file to give use the final result.
+      </p>
+      <img class="img-fluid" src="/img/posts/wk5/hexdump.JPG">
+      <span class="caption text-muted">Hexdump for pages "stack"</span>
