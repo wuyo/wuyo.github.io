@@ -1,0 +1,76 @@
+---
+layout: post
+title: "Week 6 Write Up"
+subtitle: "Network Security"
+date: 2019-08-03 14:28:10 -0800
+background: ''
+---
+<h2 class="section-heading">Protection Strategies</h2>
+  <p>
+    Network, is always the most effetive way to spread the malware, contaminate a thousands or or millsions of machine.
+    Therefore, to prevent the infection, the enhance the network security plays an really important role to deal with the dark arts.
+    </p>
+  <p>
+    To get started, we first introduce few protection strategies.
+    </p>
+  <p>
+    Postive Policy - Which means a network is designed for specific purpose. Only administrator or authorized person knows what the network is used for.
+    Other activilites will not be allowed. For example, a network is designed for mail server,  if a hacker trying to sneak in the network, it will be spotted immediately.
+    </p>
+  <p>
+    Firewall / Security Zones - To devide the network into a series of security zones. Then define the rules that to determeine the interactions of the protocols.
+    For example, if there are some third party coporation trying to connect to your network, you can sepecific a secuirty zone to allowd only speicial protocols to communicate.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/wk6/firewall_pic.JPG">
+    <span class="caption text-muted">Firewall Security Zones</span>
+
+    <img class="img-fluid" src="/img/posts/wk6/firewall_rule.JPG">
+    <span class="caption text-muted">Firewall Security Rules</span>
+
+  <p>
+    Defense in Depth - Like a castle, mutiple layering defense, if one defense down, the others can be retreated to.
+    </p>
+  <p>
+    Intrusion Protection - Looking for things that you don't want to happend. Using signatures to determine you are being attacked or not.
+    </p>
+  <p>
+    Honey Nets - To trick the attacker thought he is attacking the right place.
+    </p>
+  <p>
+    Quarantine - A seperate layer that prevent the suspicious host to attack the main network.
+    </p>
+  <p>
+    Reputation - A big data strategy to collect the specific host / ip address reputation. The data will be share between the hosts and server. For example, if a ip address have been mark as suspicious a serveral times.
+    Then other machine's firewall can use this information to block the connections for this ip address. Furthermore, we can bind the real world location to the MAC address.
+    Which means if a range of the ip address or ip sets are located n the same area, then it will be also marked a suspicious.
+    </p>
+
+<h2 class="section-heading">MITM</h2>
+
+  <p>
+    Then, let's move to the next topic - MITM attack.
+    </p>
+
+  <p>
+    MITM - Which means man in the middle. MITM doesn't mean is always the bad thing. For example, proxy is actually is one of the example of the MITM. HTTP Proxy, allows to intercept the http traffic to monitor the red flegs.
+    Terminating TCP proxy, for example to used to reduce the load on the main servers by offloading the complex calculation to the other server or machine.
+    </p>
+
+  <p>
+    When it comes to bad side, the MITM attack will become a very dangerous but very effetive way to attack patinet. With MITM, the attack can inspect all the traffic from the attack patient. For example, when you using online baking service,
+    the attacker use MITM to inspect the traffic, the attacker possibliy will be able to obtain the banking login cookie. Then the attacker will be able use the cookie to login the banking service. If the website is using the http protocol, then
+    the attacker will be really easy extract to information such as username and password since the http protocol is not encrypted.
+    </p>
+
+    <p>
+      So, how the MITM attack happen? How to start a MITM attack? The typical example are ARP Poisoning, which tricks the host thought the attacker machine is the actual machine. TCP Hijacking manipulating the TCP Data by adding or editing what's in it.
+      </p>
+
+    <p>
+      How to prevent it? Using https protocol is a very effetive way to prevent such situation. HTTPS protocol encypted the bandwidth, and only valid certificate can be able to decrypted it. However, in realitiy, there is also chances that the attacker
+      add custom certificate to the machine, then force to add the custom certificate to the trust zones. Then, the https will be meanless.
+      </p>
+
+      <img class="img-fluid" src="/img/posts/wk6/certificate.JPG">
+      <span class="caption text-muted">Source: Lecture PPT</span>
