@@ -1,0 +1,70 @@
+---
+layout: post
+title: "Week 7 Write Up"
+subtitle: "Web Security"
+date: 2019-08-10 20:15:34 -0800
+background: ''
+---
+<h2 class="section-heading">Web Attack</h2>
+  <p>
+    Last week, we talked about the network security, and the mass majority of the malware are deliver by the network. This week, we will talk about how malware are fianlly being installed on the system machine.
+    First, a fun fact, there are 95% pf the malware are deliver by the Web
+  </p>
+
+    <img class="img-fluid" src="/img/posts/wk7/95web.JPG">
+    <span class="caption text-muted">Source: Lecture PPT</span>
+
+<h2 class="section-heading">User Level Attack</h2>
+  <p>
+    In a lots of situation, the malwares are actually being installed by the user. There are few types of primary user level attack, including Phishing, fake AV, Social Media Link Insertion, Malvertising,
+    Fourm Link Insertion, SEO Poisoning.
+    </p>
+
+  <p>
+    Phishing - a very common way to fetch the password. Typically, the attacker will build a website that looks extremelly similar to the original website, for example Facebook. Then the victim may consider is
+    the legit Facebook website. Then victim will enter their user account name or password. However, the websitr backend is actually logging victim's credential, casuing the information leak. To identify these
+    website, is actaully pretty easy, all you have to do is to look at the website URL address, to judge the website is legitmate or not. However, some attacker will also try to set the url to extremely looks like the
+    original website, makes people failed to identify thoes phishing urls. Fortunatelly, a lots of web browser today also has a strategy that simliar to what we mention before - reputation list. The web browser will
+    trying to give a warning to the user to notify then is the legitmate websit or not.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/wk7/phishing.JPG">
+    <span class="caption text-muted">Source: Lecture PPT</span>
+
+  <p>
+    Fake AV - a piece of software that fake the interface to an anti-malware software. Typically, It will prompt a dialog box that warns the user the computer is infected, then ask user to pay the money to buy the software then it can continue to remove the malware.
+    In most cases, the fake AV does nothing to the computer, though it might have a interface that shows the it is scaninng the system but actaully it is not. Fortunatelly, this kind of fake AV doe snot harm to the computer, but what if the fake AV is actaully doing
+    some bad stuff on the system? The victim will never know, and they will even think the fake av is doing the great job becuase it helps them to clean up the malwares. The things that need to notice that is, in most cases, these kind of software are "agreed" to
+    be installed on the computer by the victim themselves. Because before installation, the fake AV will let the victim decide to agree the terms of services, and user will choose agree. Which makes the victim loose the right to get their money back.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/wk7/fakeav.JPG">
+    <span class="caption text-muted">Fake AV interface Source: Lecture PPT</span>
+
+  <p>
+    Social Media Link Insertion - A new world for attacker and malware autors. Since the social network has the advatange of spread the message very quickly, the attacker can use it as a very effetive tools to deliver their malware or achieve their goal. For example, the attacker
+    post a post somehting like:  "You have been selected as our lucky winner, clik the link below to claim your price" then with a malicious link below. if one victim click on the malicious link in the post on the facebook, then the link redirect to a facebook phishing website - which
+    we mentioned before, then the victim enter his Facebook username and password. Boom, the attacker has the victim's credential. That's not done yet, the attack can use the credential to login victim's facebook account, and use his identity to post another post that contains the malicious link.
+    Just imagine, a friend of the victim will see the post, and also click on that malicious link, what will happend? Yes, it will happen the same thing as like the victim's. The malicoius link will keep spreading. It is extremely dangerous since there are still lots of people have no idea
+    how to identify them.
+    </p>
+
+  <p>
+    Malvertising - An advertisment that contain malware software download link or malicious website. The attacker injecting malicious or malware-laden advertisements into legitimate online advertising networks and webpages. For example, you meay see an advertisment that
+    "tells" you your computer is infected or the system needs to install some updates. And, yes, this lead to what we just mentioned before - Fake AV. Liek we mentioned beforem, the victims may think the computer is infetced, then they will click on the advertisment.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/wk7/malvertising.JPG">
+    <span class="caption text-muted">Source: Lecture PPT</span>
+
+  <p>
+    SEO Poisoning - The attaker to use the treding search enginee keyword to deliver the malware. For example, with the recent popular game "Apex Lengend" from EA, the attacker will setup a website with "Apex Legend" Mobile. The user might be think it is the real deal, then
+    download the mobile installation file from the website. However, there is actually no mobile version of the game being released yet, which means the victim actually downloads the malware file. There are also other example like celebrities, pop culture, world events etc.
+    </p>
+
+    <h2 class="section-heading">Solution</h2>
+
+    <p>
+      Is actually very easy to avoid attacked by the attacking method that we mentiod above. As we can see, all these attack have the common, which is to bait the victim, if the user does not lick on thoes link or malvertisment, nothing will happen. Thus, the user need to learn or
+      imporve some basic skill to identify thoes malicious links. Not only the user, the web browser, the webiste itself also doing the job to enhace their security to prevent being attacked. Howerver, that said, ther are still have a long way to go tough we are always step behind.
+      </p>
