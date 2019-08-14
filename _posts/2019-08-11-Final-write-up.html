@@ -1,0 +1,72 @@
+---
+layout: post
+title: "Final Write-Up"
+subtitle: "Web Security"
+date: 2019-08-10 20:15:34 -0800
+background: ''
+---
+<h2 class="section-heading">Hack The Box</h2>
+  <p>
+    So, is time to do the real thing after learning so much knowledge of computer secuirty. Let's do some hacking challenge. To do the challenges, we need to register Hackthebox account first. After clicking the link that shows
+    the registration link, the website rediret to another page that shown below.
+    </p>
+
+  <img class="img-fluid" src="/img/posts/final/box/invite_box.JPG">
+  <span class="caption text-muted">Redirect Page</span>
+
+  <p>
+    The first thing that come to my mind is the invite code should be offer by the school, but the fact is, nothing was given. Then I finally realize that the challenge is actually already begun. I need to find the way to acquire the invide code myself.
+    Then, I open up the chrome built-in developer console and tried to inspect any specious elements or javascipts that can be used. I then notice a specious element arrtibutes as the image show below.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/box/box_token.JPG">
+    <span class="caption text-muted">An element with "hidden" attribute</span>
+
+  <p>
+    Thus, I manually delete the "hidden" attribute, then the interface changes to the image shown below
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/box/box_token_show.JPG">
+    <span class="caption text-muted">Hidden Token shown after delete the "hidden" attribute</span>
+
+  <p>
+    Then, I try to signup with the token that show in the white box. And of course, it did not work. It is obvious that the invite code has nothing to do with the token. Then, I start digging the javascripts to see if there are any hints or somehting else is
+    useful. Then I notice there is a javascript file called "inviteapi.min.js". After open the javascipts, the code in the script is clearly has been obfuscated which makes the code really hard to understand. Next, I copied all the code the the oneline javascipt
+    deobfuscation website to see if it can deobfusted. Fortunatelly, it works.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/box/inviteapi_obfs.JPG">
+    <span class="caption text-muted">Obfuscated javascript code</span>
+
+    <img class="img-fluid" src="/img/posts/final/box/inviteapi_deobfs.JPG">
+    <span class="caption text-muted">Javascipt after Deobfuscation</span>
+
+    <p>
+      As we can see from the image above, there is a function called "makeInviteCode" in the javascript. What if I try to call this function in the Chrome console? The magic happend, the website server retrun an encrypted message with ROT13 cipher.
+      Copy the message to the ROT13 ciper decoder, we can get the original message "In order to generate the invite code, make a POST request to /api/invite/generate"
+      </p>
+
+    <img class="img-fluid" src="/img/posts/final/box/message_encode.JPG">
+    <span class="caption text-muted">After calling the makeInviteCode function</span>
+
+    <img class="img-fluid" src="/img/posts/final/box/message_decode.JPG">
+    <span class="caption text-muted">Original Message after decode with ROT13 decoder</span>
+
+    <p>
+      From the orignal messge, we can know that to accquire a invite code, we need to make a POST request to the hackthebox.eu/api/invite/generate. Withmy past experience with cloud development, we can use a tool clled "Postman" to make a POST request.
+      After making the POST request with Postman, we recieved another message that maybe is the invite code. However, there is another data that comes along with the responde. "Format":"encoded". From this data and combine with the code itself, it is
+      extremely likely that the invite code is encrypted. This prove my guess after trying to decode the message with base64 decoder.
+      </p>
+
+      <img class="img-fluid" src="/img/posts/final/box/invite_encode.JPG">
+      <span class="caption text-muted">Responde from Hackthebox.eu</span>
+
+      <img class="img-fluid" src="/img/posts/final/box/invite_decode.JPG">
+      <span class="caption text-muted">Final Invite Code after decode with base64</span>
+
+    <p>
+      After fill in the decoded invite code, we can finally register the account.
+      </p>
+
+      <img class="img-fluid" src="/img/posts/final/box/success.JPG">
+      <span class="caption text-muted">Congratulation Page</span>
