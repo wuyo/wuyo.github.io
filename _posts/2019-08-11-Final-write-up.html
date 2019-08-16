@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Final Write-Up"
-subtitle: "Web Security"
+subtitle: "Hacking Challenge"
 date: 2019-08-10 20:15:34 -0800
 background: ''
 ---
@@ -70,3 +70,47 @@ background: ''
 
       <img class="img-fluid" src="/img/posts/final/box/success.JPG">
       <span class="caption text-muted">Congratulation Page</span>
+
+<h2 class="section-heading">Reverse Engineering</h2>
+  <p>
+    The first reverse Engineering Challenge I pick was "Find the Easy Pass". The goal of the challenge is straight enough - find the password.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/easy.JPG">
+    <span class="caption text-muted">Challenge Objective</span>
+
+  <p>
+    The program is a standard PE file that run under windows environment. To debug the program, we need the windows debugger - WinDbg. However, we need somehting more powerful and convienet tool that can help us to crack the password. Thus, here, we use IDA -The Interactive Disassembler.
+    Since we dont know that the exact password, so let's input something special string that will be useful to future debugging. So, let's enter "fake" in the dialoge box, to see what will happen. As the image shown below, after input the wrong password, the program will prompt "Wrong password!"
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/easypass/wrong.jpg">
+    <span class="caption text-muted">Prompt after Enter The Wrong Password</span>
+
+  <p>
+    So, let's try to search the string "Wrong" to try to see what the program did before prompt the wrong prompt. We first need to attach the program process, switch to disassembler mode, then, we search the string "Wrong". Luckly, we easily have the result.
+    And as the disassembler code image shown below, we can see before prompt the "Wrong password", the program called another function. And the most importnt is, there are also have register EAX and EDX. It is highly possible that the program will use these two register to store the password, then
+    compare between them. So, let's set a break point there, and then re enter the wrong password "fake".
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/easypass/function_call.jpg">
+    <span class="caption text-muted">Program Execution before prompt "Wrong password!"</span>
+
+  <p>
+    After re enter the password, and from the image shown below, the EAX register do contain the string we input - "fake", and then move to the EDX register, the EDX register also contain a string - "fortran!". it is highly possible that this is the actual final password.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/easypass/fake.jpg">
+    <span class="caption text-muted">EAX register contain string that we input "fake"</span>
+
+    <img class="img-fluid" src="/img/posts/final/easypass/final_pass.jpg">
+    <span class="caption text-muted">EDX register contain string that possibly password</span>
+
+  <p>
+    So, let's try the password that we get from the EDX register. And yes, the password is correct.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/easypass/good_job.jpg">
+    <span class="caption text-muted">EDX register contain string that possibly password</span>
+
+    
