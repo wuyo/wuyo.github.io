@@ -1,0 +1,51 @@
+---
+layout: post
+title: "Week 8 Write Up"
+subtitle: "Messaging Security"
+date: 2019-08-15 13:15:34 -0800
+background: ''
+---
+<h2 class="section-heading">Terminology</h2>
+  <p>
+  In last week, we talked about the phishing - using web page, social media network and advertisement, fake AV etc to spread out the
+  malware. In this week, we will continue to talk about the another type of phishing - spam email.
+    </p>
+
+    <p>
+      Spam - which is one of the headache problems for those who use email very open. The spam email is very similar to other types of phishing
+      technique. Some email will also fake the original comapny information. For example, the email may fake the interface that makes you feel
+      like the email is directly comming from Facebook. Then the content might be likes this: "Your facebook account as been compromise, for your account
+      safety, please click the link down below to reset your password.".  Once the victim click on that link, then it will be redirect to the fake facebook
+      password reset page. Once the victim trully enter the password, cictim's Facebook will be treuly compromise. spam email also could be unwated advertisment,
+      In general, spam email are unwated emails, they are bad, and they are suppose to be blocked by the email receive client.
+      </p>
+
+      <img class="img-fluid" src="/img/posts/wk8/spam.png">
+      <span class="caption text-muted">Example Spam Mail</span>
+
+    <p>
+      Another terminology is ham. Ham is a little bit like spam, but actually they are completely differnet. There are some email that you might not wated, but sometimes,
+      the reason why you will receive that email is because you want it. For exmaple, some websites or services will add you email address to there email system to send you promotion or something.
+      But some people said they don't remenber that they allows this before. But actaully, in most scenerio, this option is actaully list in the user agreement when you trying to register an account
+      for using some services. There also could be user's prefernce that to receive those email in the service or website setting. Typically, these email will also include a link address to let the
+      target email receiever to stop receving those email. Which means those email are actually harmless.
+      </p>
+
+<h2 class="section-heading">Solution</h2>
+  <p>
+    So, how to stop getting spam email? There are serveral solutions that can do this. These solutions are actually using the same technique.
+    </p>
+
+  <p>
+    Filter - A keyword or string that let the email client or email server to filter out the email tht include the keywords. This method often combine with statistics and big data to accomplisehd.
+    For example, Bayesian, was a spam filter tool that base on the statistics. It will try to find the words that appear the most in an spaming email among a large set of the data. However, it has been
+    replaced by Google since it has the most active mail users. Google will use this advanatge to help building keyword dataset.
+    </p>
+
+  <p>
+    Spamtrap - a honeypot that use to receive differnet kinds of the spam email. Honeypot, we mention before at the week 3, is a well setup environment that can bait the malware to do their tasks. But at the smae time,
+    There are other tools that also logging the malware behiviour and it is useful to let the researcher to analize it. You may confused about if spam email are unwated, why we still trying to receive those email? So, here,
+    we applied the same strategies as the honeypot, to bait the spam email sender to send their spam email to the spamtrap email address. Then what we are going do with all these spam emails? The spamtrap will log the spam mail's
+    sender email address. And, since a lots of spam emails are sending the email via their private server, the spamtrap will also log the mail server ip address. Then, the next step is to adding those email address and ip adderess to the
+    balck list. In week 6, we talked about the reputation list. Here, we apply the smae method, similar to the reputation list, to help the email client to identify the spam eamil.
+    </p>
