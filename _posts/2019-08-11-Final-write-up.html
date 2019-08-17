@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Final Write-Up"
-subtitle: "Hacking Challenge"
+subtitle: "Hack the Box Challenge"
 date: 2019-08-10 20:15:34 -0800
 background: ''
 ---
@@ -148,4 +148,45 @@ background: ''
       Finally, submit the username and the value of the variable "keys_encrypt" as the flag, and it works.
       </p>
 
-    <h2 class="section-heading">Reverse Engineering</h2>
+    <h2 class="section-heading">Steganography</h2>
+
+    <p>
+      Steganography,is the practice of concealing messages within other non-secret text or data. The cover media may appear unremarkable at first glance and will require close investigation. For the third hackthebox challenge, I did the steganography challenge.
+      </p>
+      <img class="img-fluid" src="/img/posts/final/uni.JPG">
+      <span class="caption text-muted">Steganography Challenge</span>
+
+    <p>
+      The goal of this challenge is to find the hidden flag in a file that contain the text file, the content of the file as shown as the image below.
+      </p>
+
+      <img class="img-fluid" src="/img/posts/final/unified/encode.jpg">
+      <span class="caption text-muted">Challenge File</span>
+
+    <p>
+      As we can see, the file contain a message that pretented to be a global language message. There is a part of the string cnanot be displayed, but it is possible that the string is actually written in different languages that the unicode format just cannot read it.
+      I first trying to extract the hex value of the whole file, but still doe snot gives any clues or hint. However, for this challenge, we actually need an another tool that help us to solve the challenge. Which is called Burp Suite.
+      </p>
+
+    <p>
+      then we try to copy whole message to the Burp Suite decoder, then decode it, to see what will happen.
+      </p>
+
+      <img class="img-fluid" src="/img/posts/final/unified/decode.jpg">
+      <span class="caption text-muted">Decode String</span>
+
+      <img class="img-fluid" src="/img/posts/final/unified/decode_2.jpg">
+      <span class="caption text-muted">Decode String</span>
+
+    <p>
+      After we decode the string, we can see that there is a string looks very familiar, and yes, after delete all the symbol "@", we can get  actual flag : HTB{tr1th3m1u5_1499}. Submit, and we are done
+      </p>
+
+      <h2 class="section-heading">Conclusion</h2>
+
+    <p>
+      From these hackthebox challenge, we can see to getting comfortable with the security area, we need to learn to use different tools, need to understand what the original author really wants and sovled things that from their perspetives.
+      </p>
+
+      <img class="img-fluid" src="/img/posts/final/profile.JPG">
+      <span class="caption text-muted">Challenge Solved</span>
