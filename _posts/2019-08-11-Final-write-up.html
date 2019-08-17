@@ -89,7 +89,7 @@ background: ''
 
   <p>
     So, let's try to search the string "Wrong" to try to see what the program did before prompt the wrong prompt. We first need to attach the program process, switch to disassembler mode, then, we search the string "Wrong". Luckly, we easily have the result.
-    And as the disassembler code image shown below, we can see before prompt the "Wrong password", the program called another function. And the most importnt is, there are also have register EAX and EDX. It is highly possible that the program will use these two register to store the password, then
+    And as the disassembler code image shown below, we can see before prompt the "Wrong password", the program called another function. And the most importnt is, there are also have register EAX and EDX. It is highly possible that the program will use these two register to store the user input and password, then
     compare between them. So, let's set a break point there, and then re enter the wrong password "fake".
     </p>
 
@@ -113,4 +113,39 @@ background: ''
     <img class="img-fluid" src="/img/posts/final/easypass/good_job.jpg">
     <span class="caption text-muted">EDX register contain string that possibly password</span>
 
-    
+  <p>
+    The second reverse engineering challenge that I did was called "snake". The challenge is to find the username and the password.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/snake.JPG">
+    <span class="caption text-muted">Challenge "Snake"</span>
+
+  <p>
+    The challenge is actaully a single python file, which means we can just inspect the code directly. So, here comes the question, if we can see the orignal code, we can just sovled it by directly modify the code, reveal the username and password, right?
+    That's whan I was thinking at first. Let's see the code from the image shown below.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/snake/code_password.JPG">
+    <span class="caption text-muted">The part of the code</span>
+
+  <p>
+    As we can see, the username and password will be finally store in an variable "slither" and "chars", so we can just print these two varianles to the terminal to get the username and password.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/snake/reveal.JPG">
+    <span class="caption text-muted">Reveal username and password</span>
+
+  <p>
+    Then, trying to submit the hackthebox challenge flag with revealed username and password, but the website return "wrong flag". Of course, how could be that easy? So, is time to digging the code manully to see whats the real password. After spending sometime
+    digging the code, an unusual part of the code got my atention. The looping at the end of the code which also responsible for the password verification is actaully only loop once. Which means the loop only verify the first character of the password - d. Which means
+    the password is incorrect. After manully examinate all the variable as the image shown below, a variable name caught my attention: "keys_encrypt", which seems possibly is the actual variable that store the password.
+    </p>
+
+    <img class="img-fluid" src="/img/posts/final/snake/decode.JPG">
+    <span class="caption text-muted">Manual calculate for each variable</span>
+
+    <p>
+      Finally, submit the username and the value of the variable "keys_encrypt" as the flag, and it works.
+      </p>
+
+    <h2 class="section-heading">Reverse Engineering</h2>
